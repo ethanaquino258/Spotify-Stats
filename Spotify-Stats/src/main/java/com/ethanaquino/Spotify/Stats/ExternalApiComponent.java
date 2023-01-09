@@ -37,6 +37,7 @@ public class ExternalApiComponent {
         ExternalApiComponent.CLIENT_SECRET = clientSecret;
     }
 
+    //Throws an error if I try to set the uri to an environment variable
     // @Value("${client.redirectUri}")
     // private String redirectString;
 
@@ -58,9 +59,13 @@ public class ExternalApiComponent {
         this.spotifyApi = spotifyApi;
     }
 
+    public SpotifyApi getSpotifyApi() throws Exception {
+        return this.spotifyApi;
+    }
+
     
     public String loginToSpotify() {
-        AuthorizationCodeUriRequest authCodeUriRequest = spotifyApi.authorizationCodeUri().build();
+        AuthorizationCodeUriRequest authCodeUriRequest = spotifyApi.authorizationCodeUri().scope("user-top-read").build();
         URI uri = authCodeUriRequest.execute();
         return uri.toString();
     }
