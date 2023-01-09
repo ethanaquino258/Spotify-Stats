@@ -1,30 +1,20 @@
 package com.ethanaquino.Spotify.Stats;
 
+import java.util.Collection;
+
 public class Song {
 
     private String songName;
-    private String artist;
+    private Collection<String> artist;
     private String albumName;
     private String songUri;
     private String imageUrl;
 
-    public void setSongName(String name) {
+    public Song(String name, Collection<String> artist, String album, String uri, String url) {
         this.songName = name;
-    }
-
-    public void setArtist(String artist) {
         this.artist = artist;
-    }
-
-    public void setAlbum(String album) {
         this.albumName = album;
-    }
-
-    public void setUri(String uri) {
         this.songUri = uri;
-    }
-
-    public void setImageUrl(String url) {
         this.imageUrl = url;
     }
 
@@ -32,7 +22,7 @@ public class Song {
         return this.songName;
     }
 
-    public String getArtist() {
+    public Collection<String> getArtist() {
         return this.artist;
     }
 

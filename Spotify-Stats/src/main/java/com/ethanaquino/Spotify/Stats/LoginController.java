@@ -20,8 +20,13 @@ public class LoginController {
             } catch (Error e) {
                 System.out.println(e.getMessage());
             }
+            //return success or the like to frontend (frontend uses as conditional)
             return "code";
+
+            //should throw an error if no scope provided
+            //eventually should try to match scope with one in the auth scopes enum provided by the library
         } else {
+            //return url to frontend
             return loginService.getSpotifyUri(scope);
         }
     }
