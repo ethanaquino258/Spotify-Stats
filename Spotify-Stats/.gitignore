@@ -36,6 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-Spotify-Stats/src/main/resources/application.properties
+*.properties
 *.env
 
