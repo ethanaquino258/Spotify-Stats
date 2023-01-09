@@ -9,15 +9,12 @@ public class LoginService {
     @Autowired
     ExternalApiComponent spotifyComponent;
 
-    public String getSpotifyUri() {
-        return spotifyComponent.loginToSpotify();
+    public String getSpotifyUri(String scope) {
+        return spotifyComponent.loginToSpotify(scope);
     }
 
     public void retrieveTokens(String code) {
         spotifyComponent.getTokens(code);
-
-        // System.out.println(spotifyComponent.getAccessToken());
-        // System.out.println(spotifyComponent.getRefreshToken());
     }
     
 }

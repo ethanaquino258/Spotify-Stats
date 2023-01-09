@@ -19,11 +19,21 @@ public class SongService {
 
     public void getTopTracks() throws Exception {
         SpotifyApi apiClient = spotifyComponent.getSpotifyApi();
-        GetUsersTopTracksRequest getUsersTopTracksRequest = apiClient.getUsersTopTracks().build();
+
+        GetUsersTopTracksRequest getUsersTopTracksRequest = apiClient.getUsersTopTracks().limit(50).build();
 
         try {
             Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
             System.out.println("Total: " + trackPaging.getTotal());
+            System.out.println(trackPaging.getItems());
+
+            for (int i=0; i < trackPaging.getItems().length; i++) {
+                System.out.println(trackPaging.getItems()[i].getName());
+            }
+
+            // for (int i = 0; i < trackPaging.getTotal(); i++) {
+            //     System.out.println(trackPaging.);
+            // }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
           }

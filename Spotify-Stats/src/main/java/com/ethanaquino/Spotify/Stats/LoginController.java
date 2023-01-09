@@ -12,16 +12,17 @@ public class LoginController {
     LoginService loginService;
 
     @GetMapping("/login")
-    public String login() {
-        return loginService.getSpotifyUri();
-    }
+    public String login(@RequestParam(required = false) String code, @RequestParam(required = false) String scope) {
 
-    @GetMapping("/callback")
-    public void callback(@RequestParam String code) {
-        try {
-            loginService.retrieveTokens(code);
-        } catch (Error e) {
-            System.out.println(e.getMessage());
+        if (code != null) {
+            try {
+                loginService.retrieveTokens(code);
+            } catch (Error e) {
+                System.out.println(e.getMessage());
+            }
+            return "code";
+        } else {
+            return loginService.getSpotifyUri(scope);
         }
     }
 }

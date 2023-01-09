@@ -54,7 +54,7 @@ public class ExternalApiComponent {
 
     @PostConstruct
     private void buildApiObject() {
-        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).setRedirectUri(SpotifyHttpManager.makeUri("http://localhost:8080/callback")).build();
+        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).setRedirectUri(SpotifyHttpManager.makeUri("http://localhost:8080/login")).build();
 
         this.spotifyApi = spotifyApi;
     }
@@ -64,8 +64,8 @@ public class ExternalApiComponent {
     }
 
     
-    public String loginToSpotify() {
-        AuthorizationCodeUriRequest authCodeUriRequest = spotifyApi.authorizationCodeUri().scope("user-top-read").build();
+    public String loginToSpotify(String scope) {
+        AuthorizationCodeUriRequest authCodeUriRequest = spotifyApi.authorizationCodeUri().scope(scope).build();
         URI uri = authCodeUriRequest.execute();
         return uri.toString();
     }
