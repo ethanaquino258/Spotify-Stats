@@ -39,18 +39,18 @@ public class SongService {
             for (int songCount=0; songCount < trackPaging.getItems().length; songCount++) {
 
                 Track thisTrack = trackPaging.getItems()[songCount];
-                Collection<Artist> artistCollection = new ArrayList<Artist>();
+                Collection<Performer> performerCollection = new ArrayList<Performer>();
 
                 for (int artistCount=0; artistCount < thisTrack.getArtists().length; artistCount++) {
 
                     ArtistSimplified thisArtist = thisTrack.getArtists()[artistCount];
 
-                    Artist artistObj = new Artist(thisArtist.getName(), thisArtist.getUri());
-                    artistCollection.add(artistObj);
+                    Performer performerObj = new Performer(thisArtist.getName(), thisArtist.getId(), thisArtist.getUri());
+                    performerCollection.add(performerObj);
                 }
 
                 //note that each album has 3 image urls ordered by decreasing image size
-                Song songObj = new Song(thisTrack.getName(), artistCollection, thisTrack.getAlbum().getName(), thisTrack.getUri(), thisTrack.getAlbum().getImages()[0].getUrl());
+                Song songObj = new Song(thisTrack.getName(), performerCollection, thisTrack.getAlbum().getName(), thisTrack.getUri(), thisTrack.getAlbum().getImages()[0].getUrl());
                 songCollection.add(songObj);
             }
 

@@ -5,14 +5,14 @@ import java.util.Collection;
 public class Song {
 
     private String songName;
-    private Collection<Artist> artist;
+    private Collection<Performer> performer;
     private String albumName;
     private String songUri;
     private String imageUrl;
 
-    public Song(String name, Collection<Artist> artist, String album, String uri, String url) {
+    public Song(String name, Collection<Performer> performer, String album, String uri, String url) {
         this.songName = name;
-        this.artist = artist;
+        this.performer = performer;
         this.albumName = album;
         this.songUri = uri;
         this.imageUrl = url;
@@ -22,8 +22,8 @@ public class Song {
         return this.songName;
     }
 
-    public Collection<Artist> getArtist() {
-        return this.artist;
+    public Collection<Performer> getPerformers() {
+        return this.performer;
     }
 
     public String getAlbum() {
