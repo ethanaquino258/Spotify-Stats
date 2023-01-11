@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,13 @@ import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
+import se.michaelthelin.spotify.requests.data.artists.GetSeveralArtistsRequest;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Artist;
 import com.ethanaquino.Spotify.Stats.Performer;
+
+import io.micrometer.common.util.StringUtils;
 
 @Service
 public class PerformerService {
@@ -38,9 +44,11 @@ public class PerformerService {
 
                 Artist thisArtist = artistPaging.getItems()[artistCount];
                 Performer performerObj = new Performer(thisArtist.getName(), thisArtist.getId(), thisArtist.getUri());
-                this.completePerformer(performerObj);
+                // this.completePerformer(performerObj);
                 performerCollection.add(performerObj);
             }
+
+            this.completeMultiplePerformers(performerCollection);
 
             return performerCollection;
 
@@ -63,10 +71,6 @@ public class PerformerService {
 
             performer.setGenre(genreCollection);
 
-            System.out.println(artist.getImages().length);
-            for (int imageCount=0; imageCount < artist.getImages().length; imageCount++) {
-                System.out.println(artist.getImages()[imageCount].getUrl());
-            }
             //note that each artist has 3-4 image urls ordered by decreasing image size
             performer.setImageUrl(artist.getImages()[0].getUrl());
 
@@ -74,5 +78,40 @@ public class PerformerService {
             System.out.println("Error: " + e.getMessage());
             throw e;
           }
+    }
+
+    public void completeMultiplePerformers(Collection<Performer> performerCollection) throws Exception {
+        SpotifyApi apiClient = spotifyComponent.getSpotifyApi();
+
+        StringBuilder idString = new StringBuilder();
+
+        Iterator<Performer> iterator = performerCollection.iterator();
+
+        while (iterator.hasNext()) {
+            idString.append(iterator.next().getPerformerId());
+            idString.append(",");
+        }
+        String artistIDs = idString.substring(0, idString.length() - 1);
+
+        System.out.println(artistIDs);
+
+
+        GetSeveralArtistsRequest getSeveralArtistsRequest = apiClient.getSeveralArtists(artistIDs).build();
+
+        try {
+            Artist[] artists = getSeveralArtistsRequest.execute();
+
+            for (int artistCount=0; artistCount < artists.length; artistCount++) {
+                final Artist thiArtist = artists[artistCount];
+                Performer thisPerformer = performerCollection.stream().filter(performer -> performer.getPerformerName().equals(thiArtist.getName())).findFirst().get();
+                Collection<String> genreCollection = Arrays.asList(artists[artistCount].getGenres());
+                thisPerformer.setGenre(genreCollection);
+                thisPerformer.setImageUrl(artists[artistCount].getImages()[0].getUrl());
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw e;
+          }
+
     }
 }

@@ -18,7 +18,7 @@ public class Performer {
         this.performerUri = uri;
     }
 
-    public String getperformerName() {
+    public String getPerformerName() {
         return this.performerName;
     }
 
