@@ -93,7 +93,7 @@ public class PerformerService {
         }
         String artistIDs = idString.substring(0, idString.length() - 1);
 
-        System.out.println(artistIDs);
+        // System.out.println(artistIDs);
 
 
         GetSeveralArtistsRequest getSeveralArtistsRequest = apiClient.getSeveralArtists(artistIDs).build();
@@ -103,10 +103,13 @@ public class PerformerService {
 
             for (int artistCount=0; artistCount < artists.length; artistCount++) {
                 final Artist thiArtist = artists[artistCount];
+                //this could be an issue. Need to implement a more unique identifier via hashcode
                 Performer thisPerformer = performerCollection.stream().filter(performer -> performer.getPerformerName().equals(thiArtist.getName())).findFirst().get();
                 Collection<String> genreCollection = Arrays.asList(artists[artistCount].getGenres());
+                if (thiArtist.getImages().length > 0) {
+                    thisPerformer.setImageUrl(thiArtist.getImages()[0].getUrl());
+                }
                 thisPerformer.setGenre(genreCollection);
-                thisPerformer.setImageUrl(artists[artistCount].getImages()[0].getUrl());
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());

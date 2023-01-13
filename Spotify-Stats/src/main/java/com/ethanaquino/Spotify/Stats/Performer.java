@@ -11,6 +11,7 @@ public class Performer {
     //have to make a separate call to obtain genres and images
     private Collection<String> genres;
     private String imageUrl;
+    private int count;
 
     public Performer(String name, String performerId, String uri) {
         this.performerName = name;
@@ -37,6 +38,10 @@ public class Performer {
     public String getImageUrl() {
         return this.imageUrl;
     }
+
+    public int getCount() {
+        return this.count;
+    }
     
     public void setId(long id) {
         this.id = id;
@@ -50,12 +55,15 @@ public class Performer {
         this.imageUrl = url;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     //there's also a simpler implementation from Objects.class (.hash())
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + (performerName == null ? 0 : performerName.hashCode());
-        hash = 31 * hash + (imageUrl == null ? 0 : imageUrl.hashCode());
+        hash = 31 * hash + (performerId == null ? 0 : performerId.hashCode());
         return hash;
     }
 
@@ -65,7 +73,7 @@ public class Performer {
         if (a == null) return false;
         if (this.getClass() != a.getClass()) return false;
         Performer performer = (Performer) a;
-        return id == performer.id && (performerName.equals(performer.performerName) && imageUrl.equals(performer.imageUrl));
+        return id == performer.id && (performerName.equals(performer.performerName) && performerUri.equals(performer.performerUri));
     }
     
 }
