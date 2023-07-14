@@ -67,7 +67,7 @@ public class ExternalApiComponent {
     public String loginToSpotify(String scope) {
         AuthorizationCodeUriRequest authCodeUriRequest = spotifyApi.authorizationCodeUri().scope(scope).build();
         URI uri = authCodeUriRequest.execute();
-        System.out.println(uri.toString());
+        // System.out.println(uri.toString());
         return uri.toString();
     }
 
