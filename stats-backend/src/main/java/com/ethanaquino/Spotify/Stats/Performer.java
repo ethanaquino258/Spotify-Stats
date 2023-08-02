@@ -9,7 +9,7 @@ public class Performer {
     private String performerId;
     private String performerUri;
     //have to make a separate call to obtain genres and images
-    private Collection<String> genres;
+    private Collection<Genre> genres;
     private String imageUrl;
     private int count;
 
@@ -31,7 +31,7 @@ public class Performer {
         return this.performerUri;
     }
 
-    public Collection<String> getGenreList() {
+    public Collection<Genre> getGenreList() {
         return this.genres;
     }
 
@@ -47,7 +47,7 @@ public class Performer {
         this.id = id;
     }
 
-    public void setGenre(Collection<String> genres) {
+    public void setGenre(Collection<Genre> genres) {
         this.genres = genres;
     }
 

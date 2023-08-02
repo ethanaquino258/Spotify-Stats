@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -83,6 +84,16 @@ public class PerformerService {
     public void completeMultiplePerformers(Collection<Performer> performerCollection) throws Exception {
         SpotifyApi apiClient = spotifyComponent.getSpotifyApi();
 
+        List<List<Performer>> partitions = new ArrayList<>();
+        
+        if (performerCollection.size() > 50) {
+            int partitionSize = 50;
+
+            for (int i=0; i < performerCollection.size(); i += partitionSize) {
+                partitions.add(performerCollection.stream().toList().subList(i, Math.min(i + partitionSize, performerCollection.size())));
+            }
+        }
+        
         StringBuilder idString = new StringBuilder();
 
         Iterator<Performer> iterator = performerCollection.iterator();
@@ -93,23 +104,39 @@ public class PerformerService {
         }
         String artistIDs = idString.substring(0, idString.length() - 1);
 
-        // System.out.println(artistIDs);
-
-
         GetSeveralArtistsRequest getSeveralArtistsRequest = apiClient.getSeveralArtists(artistIDs).build();
+        Collection<Genre> genresForPerformer = new ArrayList<>();
+        HashMap<Integer, Genre> genreMap = new HashMap<>();
 
         try {
             Artist[] artists = getSeveralArtistsRequest.execute();
 
             for (int artistCount=0; artistCount < artists.length; artistCount++) {
-                final Artist thiArtist = artists[artistCount];
-                //this could be an issue. Need to implement a more unique identifier via hashcode
+                Artist thiArtist = artists[artistCount];
+                //this could be an issue when multiple artists have the same name. What other identifier can I use in conjunction?
                 Performer thisPerformer = performerCollection.stream().filter(performer -> performer.getPerformerName().equals(thiArtist.getName())).findFirst().get();
-                Collection<String> genreCollection = Arrays.asList(artists[artistCount].getGenres());
                 if (thiArtist.getImages().length > 0) {
                     thisPerformer.setImageUrl(thiArtist.getImages()[0].getUrl());
                 }
+                
+                Collection<String> genreCollection = Arrays.asList(thisArtist.getGenres());
+                for (String genre : genreCollection) {
+                    Genre genreObj = new Genre(genre);
+                    int hashkey = genreObj.hashCode();
+
+                    if(genreMap.containsKey(hashkey)) {
+                        Genre genreAtKey = genreMap.get(hashkey);
+                        genreAtKey.setCount(genreAtKey.getCount() + 1);
+                        genreMap.put(hashkey, genreAtKey);
+                    } else {
+                        genreObj.setCount(1);
+                        genreMap.put(hashkey, genreObj);
+                    }
+                }
+
+                Collection<Genre> artistGenres
                 thisPerformer.setGenre(genreCollection);
+
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());

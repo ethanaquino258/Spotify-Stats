@@ -40,8 +40,7 @@ public class LibraryService {
             Collection<Song> songCollection = new ArrayList<Song>();
 
             //beginning of song logic
-            //current while loop logic leaves last 'page' of songs out. Need to find a more elegant solution
-            while (trackPaging.getNext() != null) {
+            while (trackPaging.getNext() != null || trackPaging.getItems().length > 0) {
                 currentCount = currentCount + trackPaging.getItems().length;
 
                 for (int trackCount=0; trackCount < trackPaging.getItems().length; trackCount++) {
@@ -63,7 +62,6 @@ public class LibraryService {
                             performerObj.setCount(1);
                             performerMap.put(hashKey, performerObj);
                         }
-
                         performerCollection.add(performerObj);
                     }
 
@@ -76,16 +74,8 @@ public class LibraryService {
             }
             //performer logic
             Collection<Performer> overallPerformers = performerMap.values();
-    
-            List<List<Performer>> partitions = new ArrayList<>();
-            int partitionSize = 50;
-
-            for (int i=0; i<overallPerformers.size(); i += partitionSize) {
-                partitions.add(overallPerformers.stream().toList().subList(i, Math.min(i + partitionSize, overallPerformers.size())));
-            }
-
-            // overallPerformers.clear();
-
+            
+            performerService.completeMultiplePerformers(overallPerformers);
             Collection<Performer> performersForLibrary = new ArrayList<>();
             for (List<Performer> list: partitions) {
                 performerService.completeMultiplePerformers(list);
