@@ -67,8 +67,11 @@ public class PerformerService {
         try {
             Artist artist = getArtistRequest.execute();
 
-            Collection<String> genreCollection = Arrays.asList(artist.getGenres());
-
+            Collection<Genre> genreCollection = new ArrayList<>();
+            for (String genre: Arrays.asList(artist.getGenres())) {
+                Genre currentGenre = new Genre(genre);
+                genreCollection.add(currentGenre);
+            }
             performer.setGenre(genreCollection);
 
             //note that each artist has 3-4 image urls ordered by decreasing image size
@@ -105,7 +108,11 @@ public class PerformerService {
                 final Artist thiArtist = artists[artistCount];
                 //this could be an issue. Need to implement a more unique identifier via hashcode
                 Performer thisPerformer = performerCollection.stream().filter(performer -> performer.getPerformerName().equals(thiArtist.getName())).findFirst().get();
-                Collection<String> genreCollection = Arrays.asList(artists[artistCount].getGenres());
+                Collection<Genre> genreCollection = new ArrayList<>();
+                for (String genre : Arrays.asList(thiArtist.getGenres())) {
+                    Genre currentGenre = new Genre(genre);
+                    genreCollection.add(currentGenre);
+                }
                 if (thiArtist.getImages().length > 0) {
                     thisPerformer.setImageUrl(thiArtist.getImages()[0].getUrl());
                 }

@@ -28,6 +28,9 @@ public class LibraryService {
     @Autowired
     PerformerService performerService;
 
+    @Autowired
+    GenreService genreService;
+
     public Library getUserLibrary() throws Exception {
         SpotifyApi apiClient = spotifyComponent.getSpotifyApi();
 
@@ -40,8 +43,7 @@ public class LibraryService {
             Collection<Song> songCollection = new ArrayList<Song>();
 
             //beginning of song logic
-            //current while loop logic leaves last 'page' of songs out. Need to find a more elegant solution
-            while (trackPaging.getNext() != null) {
+            while (trackPaging.getNext() != null || trackPaging.getItems().length > 0) {
                 currentCount = currentCount + trackPaging.getItems().length;
 
                 for (int trackCount=0; trackCount < trackPaging.getItems().length; trackCount++) {
@@ -84,8 +86,6 @@ public class LibraryService {
                 partitions.add(overallPerformers.stream().toList().subList(i, Math.min(i + partitionSize, overallPerformers.size())));
             }
 
-            // overallPerformers.clear();
-
             Collection<Performer> performersForLibrary = new ArrayList<>();
             for (List<Performer> list: partitions) {
                 performerService.completeMultiplePerformers(list);
@@ -100,8 +100,10 @@ public class LibraryService {
                 }
                 
             }
+
+            Collection<Genre> genresForLibrary = genreService.sortUniqueGenres(performersForLibrary);
             
-            Library userLibrary = new Library(songCollection, performersForLibrary);
+            Library userLibrary = new Library(songCollection, performersForLibrary, genresForLibrary);
             return userLibrary;
 
         } catch (IOException | SpotifyWebApiException | ParseException e) {
