@@ -9,7 +9,8 @@ export default function Home() {
         <h1 id="title">Spotify Stats</h1>
         <button class="redirectButton" onClick={() => {navigate('/songs')}}>Songs</button>
         <button class="redirectButton" onClick={() => {navigate('/artists')}}>Artists</button>
-        
+        <button class="redirectButton" onClick={() => {navigate('/genres')}}>Genres</button>
+        <button class="redirectButton" onClick={() => {navigate('/library')}}>Library</button>
       </div>
     );
   }

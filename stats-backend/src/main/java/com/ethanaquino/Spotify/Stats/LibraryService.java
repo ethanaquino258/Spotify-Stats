@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,4 +114,16 @@ public class LibraryService {
           }
 
     }
+
+    public List<Genre> getUserGenres() throws Exception {
+        Library library = this.getUserLibrary();
+
+        Collection<Genre> allGenres = library.getGenres();
+
+        List<Genre> listGenre = new ArrayList<>(allGenres.stream().toList());
+        Collections.sort(listGenre, Collections.reverseOrder());
+
+        return listGenre;
+    }
+
 }

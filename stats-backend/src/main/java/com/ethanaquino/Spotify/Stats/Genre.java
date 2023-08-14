@@ -1,6 +1,6 @@
 package com.ethanaquino.Spotify.Stats;
 
-public class Genre {
+public class Genre implements Comparable<Genre> {
     private long id;
     private String genreName;
     private int count;
@@ -50,4 +50,8 @@ public class Genre {
         return id == genre.id && (genreName.equals(genre.genreName));
     }
 
+    @Override
+    public int compareTo(Genre otherGenre) {
+        return Integer.compare(this.getSongCount(), otherGenre.getSongCount());
+    }
 }

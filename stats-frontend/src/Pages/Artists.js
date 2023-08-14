@@ -7,10 +7,7 @@ export default function Artists() {
         const response = await fetch(`http://localhost:8080/topArtists?timeFrame=${timeFrame}`)
 
         const result = await response.json();
-
-        console.log(result);
-        //performers is an array, need another map for that
-        //map inside of a map is kind of messy
+        
         setArtists(result.map(artist => <li key={artist.performerUri}><p>{artist.performerName}</p><img src={artist.imageUrl} alt= "no image"/></li>))
     }
 

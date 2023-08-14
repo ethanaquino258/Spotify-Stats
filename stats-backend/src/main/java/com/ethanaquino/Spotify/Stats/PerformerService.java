@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +16,6 @@ import se.michaelthelin.spotify.requests.data.artists.GetSeveralArtistsRequest;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Artist;
-import com.ethanaquino.Spotify.Stats.Performer;
-
-import io.micrometer.common.util.StringUtils;
 
 @Service
 public class PerformerService {
@@ -58,7 +52,6 @@ public class PerformerService {
           }
     }
 
-    //there's also a get multiple artists with max 50 IDs. Do that next
     public void completePerformer(Performer performer) throws Exception {
         SpotifyApi apiClient = spotifyComponent.getSpotifyApi();
 

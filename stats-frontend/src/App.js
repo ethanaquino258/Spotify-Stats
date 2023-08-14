@@ -5,6 +5,8 @@ import Home from './Pages/Home';
 import Songs from './Pages/Songs';
 import Login from './Pages/Login';
 import Artists from './Pages/Artists';
+import Genres from './Pages/Genres';
+import Library from './Pages/Library';
 import {Navigate, Outlet} from 'react-router-dom';
 import { useState } from 'react';
 
@@ -48,6 +50,8 @@ const login = async () => {
         <Route path='/home' element = {<Home />} />
         <Route path='/songs' element = {<Songs />} />
         <Route path='/artists' element = {<Artists />} />
+        <Route path='/genres' element = {< Genres />} />
+        <Route path='/library' element = {<Library />} />
       </Route>
     </Routes>
     </>
